@@ -1,23 +1,110 @@
+html {
+  background-color: #6b4a3a;
+}
+
+body {
+  min-height: calc(100vh - 40px);
+  min-height: calc(100dvh - 40px);
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  background-color: #d9c096;
+  font-family: Arial, sans-serif; 
+}
+
+@media (max-width: 640px) {
+  body {
+    margin: 8px;
+    min-height: calc(100dvh - 16px);
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topnav .attribution {
+    display: none;
+    visibility:collapse;
+  }
+  .topnav .logo {
+    display: none;
+    visibility: collapse;
+  }
+}
+
 .topnav {
-  background-color: #815454;
+  display: flex;
+  background-color: #9c7562;
   overflow: hidden;
+  align-items: flex-end;
+}
+
+.topnav .logo {
+  display: flex;
+  float: left;
+  align-items: center;
+  padding: 2px 10px;
+}
+.topnav .logo img {
+  display: block;
+  height: 80px;
+}
+.topnav .logo span {
+  align-self:flex-start;
+  color: rgb(80, 43, 32);
+  font-size: 34px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  padding: 3px 5px;
 }
 
 .topnav a {
-  float: right;
+  display: flex;
+  float: left;
   color: #f2f2f2;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 18px;
+  border-top-right-radius: 10px;
 }
-
 .topnav a:hover {
-  background-color: #ddd;
+  background-color: #e0c59d;
   color: black;
 }
-
 .topnav a.active {
-  background-color: #e7b871;
-  color: black;
+  background-color: #da9d4d;
+  color: rgb(131, 78, 64);
+  font-weight:bold;
+  align-self: stretch;
+}
+
+.topnav .attribution {
+  display: flex;
+  align-items: center;
+  margin-left:auto;
+}
+.topnav .attribution a {
+  align-self: stretch;
+  align-items: center;
+  max-width: 150px;
+}
+
+table { 
+  border-collapse: collapse; 
+  width: 100%; 
+  max-width: 800px; 
+}
+
+h, td { 
+  border: 1px solid #ccc; 
+  padding: 8px 12px; 
+  text-align: left; 
+}
+
+th { 
+  background: #f4f4f4; 
+}
+        
+tr:nth-child(even) { 
+  background: #fafafa; 
 }
