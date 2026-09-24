@@ -2,62 +2,32 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📒ВашСклад - Каталог товаров</title>
+
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/catalogue.js"></script>
+    <script src="/js/general.js"></script>
 </head>
-<body>
-    <div class="topnav">
-        <div class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/1778/1778141.png"/>
-            <span>ВашСклад</span>
-        </div>
-
-        <a href="/">Главная</a>
-        <a href="#news">Склады</a>
-        <a class="active" href="">Каталог</a>
-        <a href="#about">Документация</a>
-
-        <div class="attribution">
-            <a href="https://github.com/lozovoiPA/warehouse4u" target="_blank">
-                Проект на GitHub
-            </a>
-
-            <a href="https://www.flaticon.com/free-icon/packaging_1778141" target="_blank" title="box icons">
-                Логотип сделан mynamepong на Flaticon
-            </a>
-        </div>
+<body onload="loadLogo('catalogue'); loadCatalogue()">
+    <div class="topnav" id="topnav">
+      <!-- Filled dynamically -->
     </div>
 
     <h1>Каталог товаров</h1>
 
     <table id="productsTable">
         <thead>
-            <tr><th>Артикул</th><th>Наименование</th><th>Категория</th><th>Единицы измерения</th></tr>
+            <tr style="text-align:center; height:50px;">
+              <th>Артикул</th>
+              <th>Наименование</th>
+              <th>Категория</th>
+              <th style="max-width:90px">Единицы измерения</th>
+            </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <!-- Filled dynamically -->
+        </tbody>
     </table>
-    <!--
-  <script>
-    fetch('/api/users')
-      .then(res => res.json())
-      .then(products => {
-        const tbody = document.querySelector('#productsTable tbody');
-
-        if (products.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4">Информации о товарах нет.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = products.map(p => `
-          <tr>
-            <td>${p.sku}</td>
-            <td>${p.name}</td>
-            <td>${p.category}</td>
-            <td>${p.unit}</td>
-          </tr>
-        `).join('');
-      })
-      .catch(err => console.error(err));
-  </script> -->
 </body>
 </html>
