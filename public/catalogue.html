@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📒ВашСклад - Каталог товаров</title>
 
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/topnav.css">
+    <link rel="stylesheet" href="/css/table.css">
     <script src="/js/catalogue.js"></script>
     <script src="/js/general.js"></script>
 </head>
@@ -14,20 +16,69 @@
       <!-- Filled dynamically -->
     </div>
 
-    <h1>Каталог товаров</h1>
+    <div style="width:fit-content; margin: 5px;">
+      <div style="display: flex; justify-content: center;">
+        <h2 class="table-title">Каталог товаров</h2>
+        <div class="table-controls">
+          <button class="material-icon-button" style = "
+            background-color: rgb(255, 249, 245);
+            border-color: #9c7562;
+            color: rgb(80, 43, 32);
+            ">
+            <span class="material-symbols-outlined">add</span>
+            <span style="position: relative; top:1px;">Добавить товар</span>
+          </button>
+          <button style = "
+            background-color: #21a366;
+            border-color: #236123;
+            color: white;
+          ">
+            Создать отчет Excel
+          </button>
+        </div>
 
-    <table id="productsTable">
-        <thead>
-            <tr style="text-align:center; height:50px;">
-              <th>Артикул</th>
-              <th>Наименование</th>
-              <th>Категория</th>
-              <th style="max-width:90px">Единицы измерения</th>
-            </tr>
-        </thead>
-        <tbody>
-          <!-- Filled dynamically -->
-        </tbody>
-    </table>
+      </div>
+      <table id="productsTable">
+          <thead>
+              <tr>
+                <th>
+                  <span>Артикул</span>
+                </th>
+                <th>
+                  <span>Наименование</span>
+                </th>
+                <th>
+                  <div>
+                    <span style="max-width:90px;">Категория товара</span>
+                    <div style="gap:1px; height:unset;">
+                      <button title="Фильтр по категориям">
+                        <span class="material-symbols-outlined">filter_alt</span>
+                      </button><br/>
+                      <button title="Настройка категорий">
+                        <span class="material-symbols-outlined">settings</span>
+                      </button>
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div>
+                    <span style="max-width:90px;">Единицы измерения</span>
+                    <div style="gap:1px; height:unset;"> <!-- Add "display: block" to align buttons vertically -->
+                      <button title="Фильтр по единицам измерения">
+                        <span class="material-symbols-outlined">filter_alt</span>
+                      </button><br/>
+                      <button title="Настройка единиц измерения">
+                        <span class="material-symbols-outlined">settings</span>
+                      </button>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+          </thead>
+          <tbody>
+            <!-- Filled dynamically -->
+          </tbody>
+      </table>
+    </div>
 </body>
 </html>

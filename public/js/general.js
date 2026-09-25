@@ -1,3 +1,6 @@
+var materialIcons = 
+    "open_in_new,filter_alt,settings,add";
+
 function appendStyleLink(url) {
     var link = document.createElement('link');
     link.type = 'text/css';
@@ -12,13 +15,13 @@ function appendMaterialIcons(icon_names) {
     appendStyleLink(url);
 }
 
-function loadLogo(currentEndpoint){
+function loadLogo(currentEndpoint) {
     const topnav = document.getElementById("topnav");
     if (topnav === null) {
         console.log("Element with id \"topnav\" couldn't be found. Navigation bar will not be rendered.");
         return;
     }
-    appendMaterialIcons("open_in_new");
+    appendMaterialIcons(materialIcons);
     const links = `
         <a ${currentEndpoint=="home" ? `class="active" href=""` : `href="/"`}>Главная</a>
         <a ${currentEndpoint=="warehouses" ? `class="active" href=""` : `href="/warehouses"`}>Склады</a>

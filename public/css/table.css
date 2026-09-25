@@ -1,0 +1,85 @@
+.table-title {
+  margin: unset;
+  margin-top: 10px;
+  margin-left: 10px;
+  font-size: 27px;
+}
+
+.table-controls {
+  display:flex; 
+  float: right; 
+  align-self:flex-end; 
+  margin-left: auto; 
+  gap: 4px;
+}
+
+.table-controls button {
+  font-family: inherit;
+  font-size: 18px;
+  border-radius: 50px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+table { 
+  border-collapse: collapse; 
+  width: 100%; 
+  max-width: 800px;
+  margin: 8px;
+}
+
+td { 
+  border-left: 1px solid #bdbbbb;
+  border-right: 1px solid #bdbbbb;
+  padding: 8px 12px; 
+  text-align: left; 
+}
+
+th { 
+  background: rgb(226, 197, 180);
+  border-left: 2px solid #9c7562;
+  border-top: 2px solid #9c7562;
+  border-right: 2px solid #9c7562;
+  color: rgb(80, 43, 32);
+
+  height:40px; 
+  align-items:center; 
+  justify-content:center;
+}
+
+th div {
+  display: flex;
+  height: 100%;
+  gap: 8px;
+  align-items:center; 
+  justify-content:center;
+}
+
+th span {
+  display: inline-flex;
+  text-align: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+th button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width:min-content;
+  height:min-content; /* By default button will stretch vertically because of flex, this makes its height minimal to fit content (icon)*/
+  padding: 0px;
+  border-radius: 7px;
+}
+
+tbody tr {
+  background: rgb(248, 234, 227);
+}
+
+th button .material-symbols-outlined {
+  color: rgb(68, 68, 68);
+}
+        
+tr:nth-child(even) { 
+  background: white;
+}

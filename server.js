@@ -42,7 +42,8 @@ app.get('/api/products', async (req, res) => {
   const [rows] = await pool.promise().query('SELECT * FROM products');
   res.json(rows);
 });
-// 404
+// 204 и 404
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use((req, res, next) => { 
 	res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
