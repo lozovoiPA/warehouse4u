@@ -1,3 +1,5 @@
+var modalBackground;
+
 function loadCatalogue() {
     fetch('/api/products')
         .then(res => res.json())
@@ -19,4 +21,20 @@ function loadCatalogue() {
             `).join('');
         })
         .catch(err => console.error(err));
+    
+    modalBackground = document.getElementById("modal-background");
+    modalBackground.addEventListener('click', (event) => {
+        if (event.target === modalBackground) {
+            closeProductForm();
+        }
+    });
+    // showProductForm(); <-- test
+}
+
+function showProductForm() {
+    modalBackground.classList.toggle("not-visible");
+}
+
+function closeProductForm() {
+    modalBackground.classList.toggle("not-visible");
 }

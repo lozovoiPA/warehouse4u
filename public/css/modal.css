@@ -1,0 +1,84 @@
+@keyframes modal-background-fade-in {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes modal-background-fade-out {
+  from {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+#modal-background {
+  position: fixed;
+  top:0;
+  left:0;
+
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: 100%;
+  height: 100%;
+}
+
+.modal-bg-fade-in-anim {
+  animation-name: modal-background-fade-in;
+  animation-duration: 1s;
+}
+
+.modal-bg-fade-in-anim {
+  animation-name: modal-background-fade-out;
+  animation-duration: 1s;
+}
+
+.modal-form {
+  position: relative;
+  z-index: 150;
+  background-color:rgb(255, 249, 245);
+
+  width: 400px;
+  height: 400px;
+
+  padding: 20px;
+  border-radius: 30px;
+
+  display: flex;
+  flex-flow: column;
+}
+
+.modal-form form {
+  width:100%;
+  height:100%;
+
+  display: flex;
+  flex-flow: column;
+}
+
+.modal-form form div input {
+  width:100%;
+  height:25px;
+  font-size: 18px;
+  margin:10px;
+}
+
+.modal-form form .form-controls {
+  display: flex;
+  width: min-content;
+  margin-left: auto;
+  margin-top:auto;
+}
+
+.modal-form form .form-controls input {
+  width: 100px;
+}

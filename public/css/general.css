@@ -25,3 +25,9 @@ body {
   justify-content: center; 
   gap: 5px;
 }
+
+.not-visible {
+  display: none;
+  visibility: collapse;
+}
+

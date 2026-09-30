@@ -8,10 +8,38 @@
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/topnav.css">
     <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/modal.css">
+
     <script src="/js/catalogue.js"></script>
     <script src="/js/general.js"></script>
 </head>
 <body onload="loadLogo('catalogue'); loadCatalogue()">
+
+    <div id="modal-background" class="not-visible">
+      <div id="product-form" class="modal-form">
+          <h2>Создание товара</h2>
+
+          <div style="display:flex; flex-grow:1; flex-shrink:1;"> <!-- Флексы позволяют заполнить пространтсво. height: не работает поскольку не учитывает margin h2-->
+            <form>
+              <div style = "width: 70%;">
+                <label for="productName">Наименование *</label>
+                  <input id="productName" name="productName" required/>
+                <label for="productCategory">Категория</label>
+                  <input id="productCategory" name="productCategory"/>
+                <label for="productUnits">Единицы измерения</label>
+                  <input id="productUnits" name="productUnits"/>
+              </div>
+
+              <div class="form-controls">
+                <input type="button" value="Отмена"/>
+                <input type="submit" value="Создать"/>
+              </div>
+            </form>
+          </div>
+          
+      </div>
+    </div>
+
     <div class="topnav" id="topnav">
       <!-- Filled dynamically -->
     </div>
@@ -24,7 +52,8 @@
             background-color: rgb(255, 249, 245);
             border-color: #9c7562;
             color: rgb(80, 43, 32);
-            ">
+            "
+            onclick="showProductForm()">
             <span class="material-symbols-outlined">add</span>
             <span style="position: relative; top:1px;">Добавить товар</span>
           </button>

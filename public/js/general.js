@@ -15,6 +15,10 @@ function appendMaterialIcons(icon_names) {
     appendStyleLink(url);
 }
 
+function empty() {
+    
+}
+
 function loadLogo(currentEndpoint) {
     const topnav = document.getElementById("topnav");
     if (topnav === null) {
@@ -38,12 +42,12 @@ function loadLogo(currentEndpoint) {
         ${links}
 
         <div class="attribution">
-            <a href="https://github.com/lozovoiPA/warehouse4u" style="max-width: 120px;">
+            <a href="https://github.com/lozovoiPA/warehouse4u" target="_blank" style="max-width: 120px;">
                 Проект на GitHub
                 <span class="material-symbols-outlined" style="font-size:0.9em">open_in_new</span>
             </a>
 
-            <a href="https://www.flaticon.com/free-icon/packaging_1778141" target="_blank" title="box icons">
+            <a href="https://www.flaticon.com/free-icon/packaging_1778141" target="_blank">
                 Логотип сделан mynamepong на Flaticon
                 <span class="material-symbols-outlined" style="font-size:0.9em">open_in_new</span>
             </a>
