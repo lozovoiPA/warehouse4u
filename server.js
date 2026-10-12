@@ -1,29 +1,13 @@
 const express = require('express');
 const path = require('path');
-const mysql = require('mysql2');
 
 const app = express();
 
 // Конфиги из .env
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
-const DB_CONF = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '',
-    database: process.env.DB_NAME || 'warehouse4u_db'
-}
 
-// Пул подключений к БД
-const pool = mysql.createPool({
-    host: DB_CONF.host,
-    user: DB_CONF.user,
-    password: DB_CONF.password,
-    database: DB_CONF.database,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+const { pool, checkConstraintQuery } = require('./db');
 
 // Подключаем статические файлы
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
@@ -39,9 +23,24 @@ app.get('/catalogue', (req, res) => {
 
 // API
 app.get('/api/products', async (req, res) => {
-  const [rows] = await pool.promise().query('SELECT * FROM products');
-  res.json(rows);
+    const { rows } = await pool.query('SELECT * FROM products');
+    res.json(rows);
 });
+
+var extractAllowedValues = function(def) {
+    const matches = def.match(/'([^']*)'/g) || [];
+    return matches.map(s => s.slice(1, -1));
+}
+
+app.get('/api/products/categories', async (req, res) => {
+    const { rows } = await pool.query(checkConstraintQuery);
+    if (rows.length === 0) {
+        return res.json([]);
+    }
+    const categories = extractAllowedValues(rows.flatMap(r => r.check_constraints)[0]);
+    res.json(categories);
+});
+
 // 204 и 404
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use((req, res, next) => { 

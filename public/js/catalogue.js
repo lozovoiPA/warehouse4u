@@ -1,4 +1,8 @@
 var modalBackground;
+var productFormContainer;
+var productName;
+var productCategory;
+var productUnits;
 
 function loadCatalogue() {
     fetch('/api/products')
@@ -22,8 +26,16 @@ function loadCatalogue() {
         })
         .catch(err => console.error(err));
     
+    // Получаем элементы (форма и ее задний фон)
     modalBackground = document.getElementById("modal-background");
-    modalBackground.addEventListener('click', (event) => {
+    productFormContainer = document.getElementById("product-form"); // Контейнер формы
+    productFormFields = productFormContainer.querySelector("form"); // Сама форма (все поля и подписи)
+    // Поля формы
+    productName = document.getElementById("product-name");
+    productCategory = document.getElementById("product-category");
+    productUnits = document.getElementById("product-units");
+
+    modalBackground.addEventListener('click', (event) => { // Любое нажатие ВНЕ формы приводит к ее закрытию
         if (event.target === modalBackground) {
             closeProductForm();
         }
@@ -32,9 +44,14 @@ function loadCatalogue() {
 }
 
 function showProductForm() {
+    productFormFields.reset();
     modalBackground.classList.toggle("not-visible");
 }
 
 function closeProductForm() {
     modalBackground.classList.toggle("not-visible");
+}
+
+function getCategoryValues() {
+    fetch('/api/products/categories')
 }
