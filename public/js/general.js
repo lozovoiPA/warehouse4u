@@ -19,7 +19,7 @@ function empty() {
     
 }
 
-function loadLogo(currentEndpoint) {
+function loadTopnav(currentEndpoint) {
     const topnav = document.getElementById("topnav");
     if (topnav === null) {
         console.log("Element with id \"topnav\" couldn't be found. Navigation bar will not be rendered.");

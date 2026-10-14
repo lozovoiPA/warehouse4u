@@ -13,7 +13,7 @@
     <script src="/js/catalogue.js"></script>
     <script src="/js/general.js"></script>
 </head>
-<body onload="loadLogo('catalogue'); loadCatalogue()">
+<body onload="loadTopnav('catalogue'); loadCatalogue()">
 
     <div id="modal-background" class="not-visible">
       <div id="product-form" class="modal-form">
@@ -23,16 +23,22 @@
             <form>
               <div style = "width: 70%;">
                 <label for="product-name">Наименование *</label>
-                  <input id="product-name" name="productName" required/>
+                <input id="product-name" name="productName" required/>
+
                 <label for="product-category">Категория</label>
-                  <input id="product-category" name="productCategory" value="Не указано"/>
+                <select id="product-category" name="productCategory">
+                  <!-- Заполняется динамически -->
+                </select>
+                
                 <label for="product-units">Единицы измерения</label>
-                  <input id="product-units" name="productUnits" value="Не указано"/>
+                <select id="product-units" name="productUnits">
+                  <!-- Заполняется динамически -->
+                </select>
               </div>
 
               <div class="form-controls">
                 <input type="button" value="Отмена" onclick="closeProductForm()"/>
-                <input type="submit" value="Создать"/>
+                <input type="submit" value="Создать" onsubmit=""/>
               </div>
             </form>
           </div>

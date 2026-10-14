@@ -1,10 +1,7 @@
-var modalBackground;
-var productFormContainer;
-var productName;
-var productCategory;
-var productUnits;
+let categoriesList = [];
+let unitsList = [];
 
-function loadCatalogue() {
+function loadProducts() {
     fetch('/api/products')
         .then(res => res.json())
         .then(products => {
@@ -25,7 +22,9 @@ function loadCatalogue() {
             `).join('');
         })
         .catch(err => console.error(err));
-    
+}
+
+function queryElements() {
     // Получаем элементы (форма и ее задний фон)
     modalBackground = document.getElementById("modal-background");
     productFormContainer = document.getElementById("product-form"); // Контейнер формы
@@ -34,11 +33,64 @@ function loadCatalogue() {
     productName = document.getElementById("product-name");
     productCategory = document.getElementById("product-category");
     productUnits = document.getElementById("product-units");
+    productFormSubmitButton = productFormFields.querySelector("sumbit");
+}
 
-    modalBackground.addEventListener('click', (event) => { // Любое нажатие ВНЕ формы приводит к ее закрытию
+function loadCatalogue() {
+    queryElements();
+    loadProducts();
+
+    // Заполнение полей списков значений значениями из БД
+    fetch('/api/products/categories')
+        .then(res => res.json())
+        .then(categories => {
+            categoriesList = categories.slice();
+            productCategory.innerHTML = categories.map(c =>
+                `<option value="${c}">${c}</option>`
+            ).join('');
+            productCategory.innerHTML += `<option value="">Не указано</option>`;
+        })
+        .catch(err => console.error(err));
+    fetch('/api/products/units')
+        .then(res => res.json())
+        .then(units => {
+            unitsList = units.slice();
+            productUnits.innerHTML = units.map(u =>
+                `<option value="${u}">${u}</option>`
+            ).join('');
+            productUnits.innerHTML += `<option value="">Не указано</option>`;
+        })
+        .catch(err => console.error(err));
+
+    modalBackground?.addEventListener('click', (event) => { // Любое нажатие ВНЕ формы приводит к ее закрытию
         if (event.target === modalBackground) {
             closeProductForm();
         }
+    });
+    productFormFields?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const payload = {
+            name:     productName.value.trim(),
+            category: productCategory.value || null,
+            units:    productUnits.value || null,
+        };
+
+        console.log("Product POST submit request:");
+        console.log(payload);
+
+        let req = { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload) 
+        };
+        let res = await fetch('/api/products', req);
+
+        console.log(req);
+        console.log(res);
+
+        closeProductForm();
+        await loadProducts();
     });
     // showProductForm(); <-- test
 }

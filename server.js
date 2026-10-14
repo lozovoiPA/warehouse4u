@@ -2,16 +2,18 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+const productsController = require('./public/js/productsController');
 
 // Конфиги из .env
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
-const { pool, checkConstraintQuery } = require('./db');
-
 // Подключаем статические файлы
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
+
+// Подключение обработки JSON запросов
+app.use(express.json());
 
 // Страницы
 app.get('/', (req, res) => {
@@ -22,24 +24,14 @@ app.get('/catalogue', (req, res) => {
 });
 
 // API
-app.get('/api/products', async (req, res) => {
-    const { rows } = await pool.query('SELECT * FROM products');
-    res.json(rows);
-});
-
-var extractAllowedValues = function(def) {
-    const matches = def.match(/'([^']*)'/g) || [];
-    return matches.map(s => s.slice(1, -1));
-}
-
-app.get('/api/products/categories', async (req, res) => {
-    const { rows } = await pool.query(checkConstraintQuery);
-    if (rows.length === 0) {
-        return res.json([]);
-    }
-    const categories = extractAllowedValues(rows.flatMap(r => r.check_constraints)[0]);
-    res.json(categories);
-});
+// Получение всех товаров
+app.get('/api/products', productsController.getProducts);
+// Получение категорий из отдельной таблицы
+app.get('/api/products/categories', productsController.getProductCategories);
+// Получение единиц измерений
+app.get('/api/products/units', productsController.getProductUnits);
+// Создание товара
+app.post('/api/products', productsController.createProduct);
 
 // 204 и 404
 app.get('/favicon.ico', (req, res) => res.status(204).end());

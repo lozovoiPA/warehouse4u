@@ -21,18 +21,6 @@ const pool = new pg.Pool({
     queueLimit: 0
 });
 
-const checkConstraintQuery = `
-    SELECT pg_get_constraintdef(c.oid) AS check_constraints
-    FROM pg_constraint c
-    JOIN pg_class t ON c.conrelid = t.oid
-    JOIN pg_namespace n ON t.relnamespace = n.oid
-    WHERE c.contype = 'c'
-      AND n.nspname = 'public'
-      AND t.relname = 'products'
-      AND c.conname = 'chk_category';
-`;
-
 module.exports = {
-    pool,
-    checkConstraintQuery
+    pool
 };
