@@ -1,10 +1,14 @@
 let categoriesList = [];
 let unitsList = [];
+let productsList = [];
+let formMode = "create"; // "create" | "edit"
+let editingProduct = null;
 
 function loadProducts() {
     fetch('/api/products')
         .then(res => res.json())
         .then(products => {
+            productsList = products;
             const tbody = document.querySelector('#productsTable tbody');
 
             if (products.length === 0) {
@@ -12,12 +16,16 @@ function loadProducts() {
                 return;
             }
 
-            tbody.innerHTML = products.map(p => `
+            tbody.innerHTML = products.map((p, i) => `
                 <tr>
                     <td>${p.sku ?? "Не указано"}</td>
                     <td>${p.name ?? "Не указано"}</td>
                     <td>${p.category ?? "Не указано"}</td>
-                    <td>${p.unit ?? "Не указано"}</td>
+                    <td class="row-edit-cell">
+                        ${p.unit ?? "Не указано"}
+                        <div class="row-hover"></div>
+                        <div class="row-edit"><button type="button" title="Редактировать" onclick="showProductForm(productsList[${i}])"><span class="material-symbols-outlined">edit</span></button></div>
+                    </td>
                 </tr>
             `).join('');
         })
@@ -33,7 +41,8 @@ function queryElements() {
     productName = document.getElementById("product-name");
     productCategory = document.getElementById("product-category");
     productUnits = document.getElementById("product-units");
-    productFormSubmitButton = productFormFields.querySelector("sumbit");
+    productFormTitle = productFormContainer.querySelector("h2");
+    productFormSubmitButton = productFormFields.querySelector('input[type="submit"]');
 }
 
 function loadCatalogue() {
@@ -70,6 +79,11 @@ function loadCatalogue() {
     productFormFields?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        if (formMode === "edit") {
+            // TODO: обработка сохранения изменений товара
+            return;
+        }
+
         const payload = {
             name:     productName.value.trim(),
             category: productCategory.value || null,
@@ -95,8 +109,23 @@ function loadCatalogue() {
     // showProductForm(); <-- test
 }
 
-function showProductForm() {
+// Без аргумента - режим создания, с товаром - режим редактирования
+function showProductForm(product = null) {
     productFormFields.reset();
+    if (product) {
+        formMode = "edit";
+        editingProduct = product;
+        productFormTitle.textContent = "Редактирование товара";
+        productFormSubmitButton.value = "Сохранить";
+        productName.value = product.name ?? "";
+        productCategory.value = product.category ?? "";
+        productUnits.value = product.unit ?? "";
+    } else {
+        formMode = "create";
+        editingProduct = null;
+        productFormTitle.textContent = "Создание товара";
+        productFormSubmitButton.value = "Создать";
+    }
     modalBackground.classList.toggle("not-visible");
 }
 
