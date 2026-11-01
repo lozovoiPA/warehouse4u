@@ -128,3 +128,37 @@ tbody tr:hover .row-edit {
   color: rgb(68, 68, 68);
   font-size: 20px;
 }
+
+.table-scroll {
+    position: relative;
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: auto;
+    background: transparent;
+    width: 100%;
+    border: 2px solid rgb(155, 94, 76);
+    padding-top: 4px;
+    border-radius: 4px;
+}
+
+.table-scroll table {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-scroll thead th {
+    position: sticky;
+    top: 6px;
+    z-index: 2;
+    background: rgb(226, 197, 180);
+    border-left: none;
+}
+
+.table-scroll thead th:first-of-type {
+    border-left: 2px solid #9c7562;
+}

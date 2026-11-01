@@ -1,0 +1,127 @@
+.warehouse-container {
+    display: flex;
+    gap: 40px;
+    margin: 5px;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.warehouse-list-section {
+    flex: 0 0 400px;
+    min-width: 0;
+}
+
+.warehouse-details-section {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media (max-width: 900px) {
+    .warehouse-container {
+        flex-direction: column;
+    }
+    .warehouse-list-section,
+    .warehouse-details-section {
+        width: 100%;
+    }
+}
+
+#warehousesTable tbody tr {
+    cursor: pointer;
+}
+
+#warehousesTable tbody tr:hover {
+    background-color: bisque;
+}
+
+#warehousesTable tbody tr.active {
+    background: #da9d4d;
+    color: rgb(80, 43, 32);
+    cursor: default;
+}
+
+#warehousesTable tbody tr.active td {
+    border-left-color: #9c7562;
+    border-right-color: #9c7562;
+}
+
+#warehousesTable tbody tr.active:nth-child(even) {
+    background: #da9d4d;
+}
+
+.detail-block {
+    width: 98%;
+}
+
+.detail-title-container {
+    position: relative;
+    left: 2px;
+    top: 12px;
+    background-color: #d9c096;
+    width: 100%;
+    height: 10px;
+    z-index: 2;
+}
+
+.detail-title {
+    font-size: 22px;
+    color: rgb(80, 43, 32);
+    position: relative;
+    width: max-content;
+    top: 18px;
+    background-color: #d9c096;
+    display: inline-block;
+    z-index: 3;
+}
+
+#movementsTable {
+    max-width: 1000px;
+    width: 100%;
+}
+
+#stockItemsTable {
+    max-width: 600px;
+    width: 100%;
+}
+
+#warehousesTable,
+#stockItemsTable,
+#movementsTable {
+    margin: 8px;
+}
+
+#warehousesTable tbody tr td[colspan],
+#stockItemsTable tbody tr td[colspan],
+#movementsTable tbody tr td[colspan] {
+    text-align: center;
+    color: rgb(80, 43, 32);
+    font-style: italic;
+    background: rgb(248, 234, 227);
+}
+
+@media (max-width: 640px) {
+    .warehouse-container {
+        margin: 4px;
+        gap: 10px;
+    }
+
+    .detail-title {
+        font-size: 19px;
+        margin-left: 4px;
+    }
+
+    #warehousesTable,
+    #stockItemsTable,
+    #movementsTable {
+        margin: 4px;
+    }
+
+    #stockItemsTable,
+    #movementsTable {
+        font-size: 14px;
+    }
+}

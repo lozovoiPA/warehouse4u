@@ -62,9 +62,44 @@ const createProduct = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({ message: 'Некорректный идентификатор товара' });
+    }
+
+    const { name, category, units } = req.body;
+    if (typeof name !== 'string' || name.trim() === '') {
+        return res.status(400).json({ message: 'Наименование товара обязательно' });
+    }
+
+    try {
+        // category и unit перезаписываются как есть (null = "Не указано")
+        const { rows } = await pool.query(
+            `
+            UPDATE products
+            SET name = $1, category = $2, unit = $3
+            WHERE id = $4
+            RETURNING *
+            `,
+            [name.trim(), category ?? null, units ?? null, id]
+        );
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Товар не найден' });
+        }
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        res.status(400).json({
+            message: 'Не удалось обновить товар',
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     getProducts,
     getProductCategories,
     getProductUnits,
-    createProduct
+    createProduct,
+    updateProduct
 }

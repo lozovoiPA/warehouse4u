@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📦ВашСклад - Склады и движение</title>
+
+    <link rel="stylesheet" href="./css/general.css">
+    <link rel="stylesheet" href="./css/topnav.css">
+    <link rel="stylesheet" href="./css/table.css">
+    <link rel="stylesheet" href="./css/warehouses.css">
+
+    <script src="./js/warehouses.js"></script>
+    <script src="./js/general.js"></script>
+</head>
+<body onload="loadTopnav('warehouses'); loadWarehousesPage()">
+
+    <div class="topnav" id="topnav">
+      <!-- Filled dynamically -->
+    </div>
+
+    <div class="warehouse-container">
+
+        <div class="warehouse-list-section">
+            <h2 class="table-title">Склады</h2>
+            <table id="warehousesTable">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Название</span>
+                        </th>
+                        <th>
+                            <span>Адрес</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="warehouse-details-section" id="warehouseDetails">
+            <div class="detail-block">
+                <h3 class="table-title detail-title">Остатки на складе</h3>
+                <div class="detail-title-container"></div>
+                <div class="table-scroll">
+                    <table id="stockItemsTable">
+                        <thead>
+                            <tr>
+                                <th><span>Артикул</span></th>
+                                <th><span>Товар</span></th>
+                                <th><span>Кол-во</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <h3 class="table-title detail-title">Движения</h3>
+                <div class="detail-title-container"></div>
+                <div class="table-scroll">
+                    <table id="movementsTable">
+                        <thead>
+                            <tr>
+                                <th><span>Товар</span></th>
+                                <th><span>Кол-во</span></th>
+                                <th><span>Откуда</span></th>
+                                <th><span>Куда</span></th>
+                                <th><span>Оператор</span></th>
+                                <th><span style = "min-width: 150px">Дата</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -80,7 +80,21 @@ function loadCatalogue() {
         e.preventDefault();
 
         if (formMode === "edit") {
-            // TODO: обработка сохранения изменений товара
+            const res = await fetch(`/api/products/${editingProduct.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name:     productName.value.trim(),
+                    category: productCategory.value || null,
+                    units:    productUnits.value || null,
+                })
+            });
+            if (!res.ok) {
+                console.error("Product PUT failed:", await res.json());
+                return;
+            }
+            closeProductForm();
+            await loadProducts();
             return;
         }
 
