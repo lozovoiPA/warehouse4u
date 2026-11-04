@@ -20,7 +20,9 @@ app.use(express.json());
 
 // Страницы
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    //res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    // topbar entry ->         <a ${currentEndpoint=="home" ? `class="active" href=""` : `href="/"`}>Главная</a>
+    res.sendFile(path.join(__dirname, 'public', 'warehouses.html'));
 });
 app.get('/catalogue', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'catalogue.html'));
@@ -46,6 +48,12 @@ app.get('/api/warehouses', warehousesController.getWarehouses);
 app.get('/api/warehouses/:id/stock', stockItemsController.getStockItems);
 // Получение движений со склада и на склад
 app.get('/api/warehouses/:id/movements', movementsController.getMovements);
+// Создание склада
+app.post('/api/warehouses', warehousesController.createWarehouse);
+// Обновление склада
+app.put('/api/warehouses/:id', warehousesController.updateWarehouse);
+// Создание движения
+app.post('/api/movements', movementsController.createMovement);
 
 // 204 и 404
 app.get('/favicon.ico', (req, res) => res.status(204).end());

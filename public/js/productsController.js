@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
         res.status(201).json(rows[0]);
     } catch (error) {
         res.status(400).json({
-            message: 'Не удалось создать пользователя',
+            message: 'Не удалось создать товар',
             error: error.message
         });
     }

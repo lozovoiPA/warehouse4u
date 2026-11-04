@@ -43,7 +43,7 @@
 }
 
 .modal-form {
-  position: relative;
+  position: absolute;
   z-index: 150;
   background-color:rgb(255, 249, 245);
 

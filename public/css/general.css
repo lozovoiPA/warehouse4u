@@ -28,6 +28,6 @@ body {
 
 .not-visible {
   display: none;
-  visibility: collapse;
+  visibility: hidden;
 }
 

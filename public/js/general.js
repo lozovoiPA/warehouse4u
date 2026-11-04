@@ -27,7 +27,6 @@ function loadTopnav(currentEndpoint) {
     }
     appendMaterialIcons(materialIcons);
     const links = `
-        <a ${currentEndpoint=="home" ? `class="active" href=""` : `href="/"`}>Главная</a>
         <a ${currentEndpoint=="warehouses" ? `class="active" href=""` : `href="/warehouses"`}>Склады</a>
         <a ${currentEndpoint=="catalogue" ? `class="active" href=""` : `href="/catalogue"`}>Каталог</a>
         <a ${currentEndpoint=="docs" ? `class="active" href=""` : `href="/docs"`}>Документация</a>

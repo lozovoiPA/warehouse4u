@@ -32,6 +32,41 @@ const getMovements = async (req, res) => {
     }
 };
 
+const createMovement = async (req, res) => {
+    try {
+        const { 
+            out_warehouse_id, 
+            in_warehouse_id, 
+            product_id, 
+            quantity, 
+            date, 
+            operator 
+        } = req.body;
+
+        if (!out_warehouse_id || !in_warehouse_id || !product_id || !quantity || !date || !operator) {
+            return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
+        }
+
+        const { rows } = await pool.query(
+            `
+            INSERT INTO movements (out_warehouse_id, in_warehouse_id, product_id, quantity, date, operator)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *
+            `,
+            [out_warehouse_id, in_warehouse_id, product_id, quantity, date, operator]
+        );
+
+        res.status(201).json(rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: 'Не удалось создать движение',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
-    getMovements
+    getMovements,
+    createMovement
 }

@@ -12,7 +12,8 @@ const getStockItems = async (req, res) => {
             SELECT 
                 si.*,
                 p.name AS product_name,
-                p.sku AS product_sku
+                p.sku AS product_sku,
+                p.id AS product_id
             FROM stock_items si
             JOIN products p ON p.id = si.product_id
             WHERE 
