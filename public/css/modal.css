@@ -72,6 +72,25 @@
   margin:10px;
 }
 
+.modal-form form div fieldset.content-column {
+  display: flex;
+  gap: 10px;
+  flex-flow: column;
+  overflow-y: auto;
+}
+
+.checkbox-alignment-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-form form div input.reset {
+  width: 25px;
+  margin: initial;
+}
+
 .modal-form form .form-controls {
   display: flex;
   width: min-content;

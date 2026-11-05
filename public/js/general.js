@@ -1,5 +1,5 @@
 var materialIcons = 
-    "open_in_new,filter_alt,settings,add,edit";
+    "open_in_new,filter_alt,settings,add,edit,select_check_box";
 
 function appendStyleLink(url) {
     var link = document.createElement('link');

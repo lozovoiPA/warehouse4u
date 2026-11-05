@@ -124,6 +124,17 @@ tbody tr:hover .row-edit {
   cursor: pointer;
 }
 
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min-content;
+  height: min-content;
+  padding: 0px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
 .row-edit button .material-symbols-outlined {
   color: rgb(68, 68, 68);
   font-size: 20px;

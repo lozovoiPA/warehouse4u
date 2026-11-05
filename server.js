@@ -54,6 +54,8 @@ app.post('/api/warehouses', warehousesController.createWarehouse);
 app.put('/api/warehouses/:id', warehousesController.updateWarehouse);
 // Создание движения
 app.post('/api/movements', movementsController.createMovement);
+// Создание отчета
+app.post('/api/reports/stock', warehousesController.generateStockReport);
 
 // 204 и 404
 app.get('/favicon.ico', (req, res) => res.status(204).end());

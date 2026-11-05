@@ -1,3 +1,5 @@
+const xlsx = require("json-as-xlsx");
+
 const { pool } = require('../../db');
 
 const getWarehouses = async (req, res) => {
@@ -69,8 +71,91 @@ const updateWarehouse = async (req, res) => {
     }
 }
 
+const generateStockReport = async (req, res) => {
+    try {
+        const { warehouseIds, categories } = req.body;
+
+        const whFilter = (warehouseIds && warehouseIds.length > 0) ? warehouseIds : null;
+        const catFilter = (categories && categories.length > 0) ? categories : null;
+
+        let query = `
+            SELECT 
+                w.name AS warehouse_name,
+                p.sku AS product_sku,
+                p.name AS product_name,
+                p.category AS product_category,
+                si.quantity
+            FROM stock_items si
+            JOIN products p ON p.id = si.product_id
+            JOIN warehouses w ON w.id = si.warehouse_id
+            WHERE 1=1
+        `;
+        
+        const values = [];
+        let paramIndex = 1;
+
+        if (whFilter) {
+            query += ` AND si.warehouse_id = ANY($${paramIndex})`;
+            values.push(whFilter);
+            paramIndex++;
+        }
+
+        if (catFilter) {
+            query += ` AND p.category = ANY($${paramIndex})`;
+            values.push(catFilter);
+            paramIndex++;
+        }
+
+        query += ` ORDER BY w.id ASC, p.id ASC;`;
+
+        const { rows } = await pool.query(query, values);
+
+        //const rows = [reportData];
+        const columns = [
+                { label: "Склад", value: "warehouse_name" },
+                { label: "Артикул", value: "product_sku" },
+                { label: "Товар", value: "product_name" },
+                { label: "Категория", value: "product_category" },
+                { label: "Количество", value: "quantity" }
+            ];
+
+        const dataToExport = [
+            {
+                sheet: "Остатки",
+                columns: columns,
+                content: rows
+            }
+        ];
+
+        const settings = {
+            fileName: "Отчет_по_остаткам",
+            writeMode: "write",
+            writeOptions: {
+                type: "buffer",
+                bookType: "xlsx"
+            }
+        };
+
+        const buffer = xlsx(dataToExport, settings);
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename="stock_report.xlsx"');
+        res.status(200).send(buffer);
+
+        //res.status(200).json(rows);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Не удалось сгенерировать отчет',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getWarehouses,
     createWarehouse,
-    updateWarehouse
+    updateWarehouse,
+    generateStockReport
 }

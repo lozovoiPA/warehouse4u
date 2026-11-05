@@ -1,5 +1,6 @@
 let warehousesList = [];
 let currentStock = [];
+let categoriesList = [];
 let currentWarehouseId = null;
 let warehouseFormMode = "create";
 let editingWarehouse = null;
@@ -33,6 +34,17 @@ function queryElements() {
     movementOperator = document.getElementById("movement-operator");
 
     movementFormSubmitButton = movementFormFields.querySelector('input[type="submit"]');
+
+
+    reportFormContainer = document.getElementById("report-form"); // Контейнер формы
+    reportFormFields = reportFormContainer.querySelector("form");
+
+    warehouseFilters = document.getElementById("warehouse-filters");
+    categoryFilters = document.getElementById("category-filters");
+    warehouseFiltersLegend = warehouseFilters.querySelector("legend");
+    categoryFiltersLegend = categoryFilters.querySelector("legend");
+
+    reportFormSubmitButton = reportFormFields.querySelector('input[type="submit"]');
 }
 
 
@@ -41,6 +53,7 @@ function loadWarehouses() {
         .then(res => res.json())
         .then(warehouses => {
             warehousesList = warehouses;
+            fillWarehouseFilters();
             const tbody = document.querySelector('#warehousesTable tbody');
 
             if (warehouses.length === 0) {
@@ -154,6 +167,16 @@ function loadWarehousesPage() {
     queryElements();
     loadWarehouses();
 
+    // Загрузка категорий для фильтров
+    fetch('/api/products/categories')
+        .then(res => res.json())
+        .then(categories => {
+            categoriesList = categories.slice();
+            console.log(categoriesList)
+            fillCategoryFilters();
+        })
+        .catch(err => console.error(err));
+
     modalBackground?.addEventListener('click', (event) => { // Любое нажатие ВНЕ формы приводит к ее закрытию
         if (event.target === modalBackground) {
             closeAllForms();
@@ -236,6 +259,77 @@ function loadWarehousesPage() {
             console.error("Network error:", err);
         }
     });
+
+    // Кнопки селекта в форме фильтров
+    const selectAllWarehousesBtn = warehouseFilters.querySelector('button[title="Выбрать все"]');
+    const selectAllCategoriesBtn = categoryFilters.querySelector('button[title="Выбрать все"]');
+
+    selectAllWarehousesBtn.addEventListener('click', () => {
+        const anyChecked = isAnyCheckboxChecked(warehouseFilters);
+        toggleAllCheckboxes(warehouseFilters, !anyChecked);
+    });
+
+    selectAllCategoriesBtn.addEventListener('click', () => {
+        const anyChecked = isAnyCheckboxChecked(categoryFilters);
+        toggleAllCheckboxes(categoryFilters, !anyChecked);
+    });
+
+    reportFormFields?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        var check = checkFilters();
+
+        if(!check) { return; }
+
+        const selectedWarehouses = getSelectedValues(warehouseFilters);
+        const selectedCategories = getSelectedValues(categoryFilters);
+
+        console.log("Selected Warehouse IDs:", selectedWarehouses);
+        console.log("Selected Categories:", selectedCategories);
+
+        try {
+            /*
+            const res = await fetch('/api/reports/stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    warehouseIds: selectedWarehouses,
+                    categories: selectedCategories
+                })
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                console.error("Report generation failed:", errorData);
+                alert(errorData.message || 'Ошибка при создании отчета');
+                return;
+            }
+
+            const reportData = await res.json();
+            console.log("Report Data:", reportData);
+
+            //generateXlsxFromData(reportData);
+            */
+
+            const res = await fetch('/api/reports/stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    warehouseIds: selectedWarehouses,
+                    categories: selectedCategories
+                })
+            });
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'stock_report.xlsx';
+            a.click();
+
+            closeAllForms();
+        } catch (err) {
+            console.error("Network error:", err);
+        }
+    });
 }
 
 function showWarehouseForm(warehouse = null) {
@@ -305,8 +399,86 @@ function fillMovementQuantityRestrictions(stockItemId) {
     movementQuantity.max = `${stockItem.quantity}`
 }
 
+function showReportForm() {
+    reportFormFields.reset();
+
+    modalBackground.classList.toggle("not-visible");
+    reportFormContainer.classList.toggle("not-visible");
+}
+
+function fillWarehouseFilters(){
+    var previousFilters =  warehouseFilters.querySelectorAll(".inserted-content");
+    if(previousFilters) {
+        var len = previousFilters.length;
+        for(let i = 0; i < len; i++) {
+            warehouseFilters.removeChild(previousFilters[i])
+        }
+    }
+    warehouseFiltersLegend.insertAdjacentHTML("afterend", 
+        warehousesList.map( w =>
+            `
+            <div class="checkbox-alignment-container inserted-content">
+                <input type="checkbox" id="warehouse-${w.id}" name="warehouse-${w.id}" class="reset" value="${w.id}">
+                <label for="warehouse-${w.id}">${w.name}</label>
+            </div>
+            `
+        ).join('')
+    )
+}
+
+function fillCategoryFilters(){
+    var previousFilters = categoryFilters.querySelectorAll(".inserted-content");
+    if(previousFilters) {
+        var len = previousFilters.length;
+        for(let i = 0; i < len; i++) {
+            categoryFilters.removeChild(previousFilters[i])
+        }
+    }
+    categoryFiltersLegend.insertAdjacentHTML("afterend", 
+        categoriesList.map( w =>
+            `
+            <div class="checkbox-alignment-container inserted-content">
+                <input type="checkbox" id="category-${categoriesList.indexOf(w)}" name="category-${categoriesList.indexOf(w)}" class="reset" value="${w}">
+                <label for="category-${categoriesList.indexOf(w)}">${w}</label>
+            </div>
+            `
+        ).join('')
+    )
+}
+
+function isAnyCheckboxChecked(fieldset) {
+    return fieldset.querySelector('input[type="checkbox"]:checked') !== null;
+}
+
+function checkFilters() {
+    const hasSelectedWarehouses = isAnyCheckboxChecked(warehouseFilters);
+    const hasSelectedCategories = isAnyCheckboxChecked(categoryFilters);
+
+    if (!hasSelectedWarehouses && !hasSelectedCategories) {
+        alert("Пожалуйста, выберите хотя бы один склад и категорию.");
+        return false;
+    }
+    return true;
+}
+
+function toggleAllCheckboxes(fieldset, selectAll) {
+    const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(cb => {
+        cb.checked = selectAll;
+    });
+}
+
+function getSelectedValues(fieldset) {
+    const checkedBoxes = fieldset.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checkedBoxes).map(cb => {
+        return cb.value
+    });
+}
+
 function closeAllForms() {
     modalBackground.classList.toggle("not-visible");
     warehouseFormContainer.classList.add("not-visible");
     movementFormContainer.classList.add("not-visible");
+    reportFormContainer.classList.add("not-visible");
 }
