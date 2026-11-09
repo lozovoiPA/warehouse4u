@@ -1,0 +1,510 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Warehouse4u API",
+    "version": "1.0.0",
+    "description": "API для управления товарами, складами, остатками и движениями"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    { "name": "Products", "description": "Управление товарами" },
+    { "name": "Warehouses", "description": "Управление складами" },
+    { "name": "Stock Items", "description": "Остатки на складах" },
+    { "name": "Movements", "description": "Движения товаров" },
+    { "name": "Reports", "description": "Отчёты" }
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Получить список всех товаров",
+        "operationId": "getProducts",
+        "responses": {
+          "200": {
+            "description": "Список товаров",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Product" }
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Создать товар",
+        "operationId": "createProduct",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Товар создан",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/api/products/categories": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Получить список категорий товаров",
+        "operationId": "getProductCategories",
+        "responses": {
+          "200": {
+            "description": "Список названий категорий",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "example": ["Продукты питания", "Одежда", "Электроника", "Другое"]
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/products/units": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Получить список единиц измерения",
+        "operationId": "getProductUnits",
+        "responses": {
+          "200": {
+            "description": "Список названий единиц измерения",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "example": ["штук, шт.", "килограмм, кг.", "литров, л."]
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "put": {
+        "tags": ["Products"],
+        "summary": "Обновить товар",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Идентификатор товара"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Товар обновлён",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/warehouses": {
+      "get": {
+        "tags": ["Warehouses"],
+        "summary": "Получить список складов",
+        "operationId": "getWarehouses",
+        "responses": {
+          "200": {
+            "description": "Список складов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Warehouse" }
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Warehouses"],
+        "summary": "Создать склад",
+        "operationId": "createWarehouse",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WarehouseInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Склад создан",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/api/warehouses/{id}": {
+      "put": {
+        "tags": ["Warehouses"],
+        "summary": "Обновить склад",
+        "operationId": "updateWarehouse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Идентификатор склада"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WarehouseInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Склад обновлён",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Warehouse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/warehouses/{id}/stock": {
+      "get": {
+        "tags": ["Stock Items"],
+        "summary": "Получить остатки товаров на складе",
+        "operationId": "getStockItems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Идентификатор склада"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список остатков",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/StockItem" }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Stock Items"],
+        "summary": "Создать (добавить) остаток товара на складе",
+        "operationId": "createStockItem",
+        "parameters": [
+        {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Идентификатор склада"
+        }
+        ],
+        "requestBody": {
+        "required": true,
+        "content": {
+            "application/json": {
+            "schema": { "$ref": "#/components/schemas/StockItemInput" }
+            }
+        }
+        },
+        "responses": {
+        "201": {
+            "description": "Остаток создан",
+            "content": {
+            "application/json": {
+                "schema": { "$ref": "#/components/schemas/StockItem" }
+            }
+            }
+        },
+        "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+        }
+    },
+    "/api/warehouses/{id}/movements": {
+      "get": {
+        "tags": ["Movements"],
+        "summary": "Получить движения по складу (входящие и исходящие)",
+        "operationId": "getMovements",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Идентификатор склада"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список движений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Movement" }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/movements": {
+      "post": {
+        "tags": ["Movements"],
+        "summary": "Создать движение товара",
+        "operationId": "createMovement",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MovementInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Движение создано",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Movement" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/api/reports/stock": {
+      "post": {
+        "tags": ["Reports"],
+        "summary": "Сгенерировать отчёт по остаткам (XLSX)",
+        "operationId": "generateStockReport",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StockReportInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "XLSX-файл с отчётом",
+            "content": {
+              "application/vnd.ms-excel": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "Умные часы" },
+          "category": { "type": "string", "nullable": true, "example": "Электроника" },
+          "unit": { "type": "string", "nullable": true, "example": "штук, шт." },
+          "sku": { "type": "string", "nullable": true, "example": "SKU-001" }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Умные часы" },
+          "category": { "type": "string", "nullable": true, "example": "Электроника" },
+          "units": { "type": "string", "nullable": true, "example": "штук, шт." }
+        }
+      },
+      "Warehouse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "Основной склад" },
+          "address": { "type": "string", "example": "г. Москва, ул. Ленина, 1" }
+        }
+      },
+      "WarehouseInput": {
+        "type": "object",
+        "required": ["name", "address"],
+        "properties": {
+          "name": { "type": "string", "example": "Основной склад" },
+          "address": { "type": "string", "example": "г. Москва, ул. Ленина, 1" }
+        }
+      },
+      "StockItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "warehouse_id": { "type": "integer", "example": 1 },
+          "product_id": { "type": "integer", "example": 3 },
+          "quantity": { "type": "integer", "example": 42 },
+          "product_name": { "type": "string", "example": "Умные часы" },
+          "product_sku": { "type": "string", "nullable": true, "example": "SKU-001" }
+        }
+      },
+        "StockItemInput": {
+            "type": "object",
+            "required": ["product_id", "quantity"],
+            "properties": {
+                "product_id": { "type": "integer", "example": 3 },
+                "quantity": { "type": "integer", "minimum": 0, "example": 42 }
+            }
+        },
+      "Movement": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "out_warehouse_id": { "type": "integer", "example": 1 },
+          "in_warehouse_id": { "type": "integer", "example": 2 },
+          "product_id": { "type": "integer", "example": 3 },
+          "quantity": { "type": "integer", "example": 10 },
+          "date": { "type": "string", "format": "date-time", "example": "2025-01-15T10:00:00Z" },
+          "operator": { "type": "string", "example": "Иванов И.И." },
+          "product_name": { "type": "string", "example": "Умные часы" }
+        }
+      },
+      "MovementInput": {
+        "type": "object",
+        "required": ["out_warehouse_id", "in_warehouse_id", "product_id", "quantity", "date", "operator"],
+        "properties": {
+          "out_warehouse_id": { "type": "integer", "example": 1 },
+          "in_warehouse_id": { "type": "integer", "example": 2 },
+          "product_id": { "type": "integer", "example": 3 },
+          "quantity": { "type": "integer", "example": 10 },
+          "date": { "type": "string", "format": "date-time", "example": "2025-01-15T10:00:00Z" },
+          "operator": { "type": "string", "example": "Иванов И.И." }
+        }
+      },
+      "StockReportInput": {
+        "type": "object",
+        "properties": {
+          "warehouseIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "example": [1, 2]
+          },
+          "categories": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Продукты питания", "Одежда", "Электроника", "Другое"]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "example": "Описание ошибки" },
+          "error": { "type": "string", "example": "Технические детали" }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Некорректный запрос",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Ресурс не найден",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Внутренняя ошибка сервера",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ const createWarehouse = async (req, res) => {
             `
             INSERT INTO warehouses (name, address) VALUES
                 ($1, $2)
+            RETURNING *
             `,
             [name, address]
         )

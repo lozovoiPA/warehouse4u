@@ -32,6 +32,31 @@ const getStockItems = async (req, res) => {
     }
 };
 
+const createStockItem = async (req, res) => {
+    try {
+        const warehouse_id = Number(req.params.id);
+        if (!Number.isInteger(warehouse_id)) {
+            return res.status(400).json({ message: 'Некорректный идентификатор склада' });
+        }
+        const { product_id, quantity } = req.body;
+        const { rows } = await pool.query(
+            `
+            INSERT INTO stock_items (product_id, warehouse_id, quantity) VALUES
+                ($1, $2, $3)
+            RETURNING *
+            `,
+            [product_id, warehouse_id, quantity]
+        )
+        res.status(201).json(rows[0]);
+    } catch (error) {
+        res.status(400).json({
+            message: 'Не удалось создать остаток',
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
-    getStockItems
+    getStockItems,
+    createStockItem
 }

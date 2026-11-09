@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
 
+const swaggerUi = require('swagger-ui-express');
+const openapiDocument = require('./openapi.json');
+
 const app = express();
+
 const productsController = require('./public/js/productsController');
 const warehousesController = require('./public/js/warehousesController');
 const stockItemsController = require('./public/js/stockItemsController');
@@ -20,8 +24,6 @@ app.use(express.json());
 
 // Страницы
 app.get('/', (req, res) => {
-    //res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    // topbar entry ->         <a ${currentEndpoint=="home" ? `class="active" href=""` : `href="/"`}>Главная</a>
     res.sendFile(path.join(__dirname, 'public', 'warehouses.html'));
 });
 app.get('/catalogue', (req, res) => {
@@ -30,6 +32,7 @@ app.get('/catalogue', (req, res) => {
 app.get('/warehouses', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'warehouses.html'));
 });
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiDocument));
 
 // API
 // Получение всех товаров
@@ -46,6 +49,8 @@ app.put('/api/products/:id', productsController.updateProduct);
 app.get('/api/warehouses', warehousesController.getWarehouses);
 // Получение остатков на складе
 app.get('/api/warehouses/:id/stock', stockItemsController.getStockItems);
+// Создание остатка на складе
+app.post('/api/warehouses/:id/stock', stockItemsController.createStockItem);
 // Получение движений со склада и на склад
 app.get('/api/warehouses/:id/movements', movementsController.getMovements);
 // Создание склада

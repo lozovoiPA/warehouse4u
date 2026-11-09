@@ -50,6 +50,7 @@ const createProduct = async (req, res) => {
             `
             INSERT INTO products (name, category, unit) VALUES
                 ($1, $2, $3)
+            RETURNING *
             `,
             [name, category, units]
         )
