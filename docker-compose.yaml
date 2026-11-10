@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:18
+    container_name: w4u-postgres-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - 4400:5432
+    restart: unless-stopped
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - w4u_data:/var/lib/postgresql
+
+  app:
+    build:
+      dockerfile: DOCKERFILE
+    container_name: w4u-app
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - ${PORT}:3000
+
+volumes:
+  w4u_data:

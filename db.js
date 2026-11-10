@@ -9,6 +9,8 @@ const DB_CONF = {
     port: process.env.DB_PORT || 5432
 }
 
+console.log(`current config: %j`, DB_CONF)
+
 // Пул подключений к БД
 const pool = new pg.Pool({
     host: DB_CONF.host,
